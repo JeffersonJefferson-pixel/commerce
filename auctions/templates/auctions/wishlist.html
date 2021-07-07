@@ -1,0 +1,24 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    {% for listing in wishlist %}
+    <div class="listing">
+
+        <div class="listing_image">
+            <img src="{{listing.image}}" alt="{{listing.title}}">
+        </div>
+
+        <div class="listing_text">
+            <a href="{% url 'listings' listing.id %}"><b>{{listing.title}}</b></a>
+            <br>
+            <b>Price: $ {{listing.starting_bid}}</b>
+            <br>
+            {{listing.description}}
+            <br>
+            <br>
+            <p class="date">Created {{listing.date}}</p>
+        </div>
+
+    </div>
+    {% endfor %}
+{% endblock %}

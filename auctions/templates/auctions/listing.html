@@ -1,0 +1,50 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {{message}}
+    <h4><b>Listing: {{listing.title}}</b></h4>
+
+    <form action="{% url 'wishlist' %}" method="post">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+            <input type=hidden name="listing_id" value="{{listing.id}}">
+            {% if not is_in_wishlist %}
+            <input type="submit" name="add" value="Add To Wishlist">
+            {% else %}
+            <input type="submit" name="remove" value="Remove From Wishlist">
+            {% endif %}
+        {% endif %}
+    </form>
+
+    <img src="{{listing.image}}">
+    <h6>{{listing.description}}</h6>
+    <h5><b>${{bid}}</b></h5>
+    
+    <p>{{num_bid}} bid(s) so far.</p>
+    {% if is_highest_bidder %}
+    <p>Your bid is the current bid.</p>
+    {% endif %}
+    
+    {% if listing.is_active%}
+    <form action="{% url 'listings' listing.id %}" method="post">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+        <input type="number" name="bid" placeholder="Bid">
+        <input type="submit" name="place" value="Place Bid">
+        {% endif %}
+    </form>
+    {% endif %}
+    
+
+    {% if is_in_listings%}
+    <form action="{% url 'listings' listing.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" name="close" value="Close">
+    </form>
+    {% endif %}
+    <h5><b>Details</b></h5>
+    <ul>
+        <li>Listed by: {{listing.creator}}</li>
+        <li>Category: </li>
+    </ul>
+{% endblock %}
